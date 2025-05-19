@@ -1,0 +1,65 @@
+import re
+
+# Validation functions
+def is_valid_email(text):
+    return bool(re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', text))
+
+def is_valid_url(text):
+    return bool(re.match(r'^https?://[^\s/$.?#].[^\s]*$', text))
+
+def is_valid_phone(text):
+    return bool(re.match(r'^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$', text))
+
+def is_valid_credit_card(text):
+    return bool(re.match(r'^\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}$', text))
+
+def is_valid_time(text):
+    return bool(re.match(r'\b(?:[01]?\d|2[0-3]):[0-5]\d(?: ?[APap][Mm])?\b', text))
+
+def is_valid_html_tag(text):
+    return bool(re.match(r'<[^>]+>', text))
+
+def is_valid_hashtag(text):
+    return bool(re.match(r'^#\w+$', text))
+
+def is_valid_currency(text):
+    return bool(re.match(r'^\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?$', text))
+
+
+# Dictionary to match field types to validation functions
+validators = {
+    "1": ("Email", is_valid_email),
+    "2": ("URL", is_valid_url),
+    "3": ("Phone Number", is_valid_phone),
+    "4": ("Credit Card Number", is_valid_credit_card),
+    "5": ("Time (24hr or 12hr)", is_valid_time),
+    "6": ("HTML Tag", is_valid_html_tag),
+    "7": ("Hashtag", is_valid_hashtag),
+    "8": ("Currency Amount", is_valid_currency),
+}
+
+# Main loop
+def main():
+    print("-------Welcome to the Validator-------")
+    while True:
+        print("\nChoose from the list below what to validate:")
+        for key, (name, _) in validators.items():
+            print(f"{key}. {name}")
+        print("9. Exit")
+
+        choice = input("Enter option number: ").strip()
+        if choice == "9":
+            print("Exiting...")
+            break
+
+        if choice not in validators:
+            print("Invalid option. Try again.")
+            continue
+
+        field_name, validate_func = validators[choice]
+        user_input = input(f"Enter a {field_name} to validate: ").strip()
+        result = validate_func(user_input)
+        print(f"Result: {result}")
+
+if __name__ == "__main__":
+    main()
